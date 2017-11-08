@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour {
 	private Inventory inventory;
-	private List<string> items = new List<string>();
+	public List<string> items = new List<string>();
 	private List<TextMesh> itemNames = new List<TextMesh>();
 	private List<TextMesh> itemCount = new List<TextMesh> ();
 	public TextMesh nameText;
@@ -12,6 +12,7 @@ public class InventoryUI : MonoBehaviour {
 	public GameObject invSpace;
 	public Transform parentObject;
 	private List<GameObject> spaces = new List<GameObject>();
+	public GameObject highlighter;
 	void Start () {
 		inventory = GetComponent<Inventory> ();
 	}
@@ -34,6 +35,9 @@ public class InventoryUI : MonoBehaviour {
 			CreateSpace ();
 			CreateInventory ();
 		} 
+	}
+	public void UpdateHighlight(){
+		highlighter.transform.position = spaces [inventory.inventoryIndex].transform.position;
 	}
 	public void HideInventory(){
 		if (!inventory.hidden) {

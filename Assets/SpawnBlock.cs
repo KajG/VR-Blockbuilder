@@ -14,7 +14,7 @@ public class SpawnBlock : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (Input.GetMouseButtonDown (0) && raycastmouse.currentGameObject != null && inventory.inventory.ContainsKey(inventory.inventoryIndex)) {
+		if (Input.GetMouseButtonDown (0) && raycastmouse.currentGameObject != null && inventory.inventory.ContainsKey(inventory.inventoryString)) {
 			SpawnCube (raycastmouse.currentGameObject.name, raycastmouse.parentObject.transform);
 		}
 		if (Input.GetMouseButtonDown (1) && raycastmouse.currentGameObject != null) {
@@ -48,7 +48,8 @@ public class SpawnBlock : MonoBehaviour {
 		}
 	}
 	void Spawn(Vector3 pos, Transform parentObject){
-		GameObject obj = Instantiate (itemdatabase.GetItemObject(inventory.inventoryIndex), parentObject.position + pos, Quaternion.identity);
-		obj.name = parentObject.name;
+		GameObject obj = Instantiate (itemdatabase.GetItemObject(inventory.inventoryString), parentObject.position + pos, Quaternion.identity);
+		obj.name = inventory.inventoryString;
+		inventory.RemoveItem ();
 	}
 }

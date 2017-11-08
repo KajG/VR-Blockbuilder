@@ -6,11 +6,30 @@ public class Inventory : MonoBehaviour {
 
 	public Dictionary<string, int> inventory = new Dictionary<string, int>();
 	private RayCastMouse raycastmouse;
-	public string word;
 	public ItemDatabase itemdatabase;
 	public InventoryUI inventoryui;
-	public string inventoryIndex;
+	public string inventoryString;
+	public int inventoryIndex;
 	public bool hidden;
+	void Update(){
+		if (Input.GetKeyDown (KeyCode.UpArrow)) {
+			inventoryIndex++;
+			inventoryui.UpdateHighlight ();
+			if (inventoryIndex >= inventoryui.items.Count) {
+				inventoryIndex = inventoryui.items.Count;
+				print (inventoryui.items.Count);
+			}
+		}
+		if (Input.GetKeyDown (KeyCode.DownArrow)) {
+			if (inventoryIndex >= 0 && inventoryIndex <= inventoryui.items.Count) {
+				inventoryIndex--;
+				inventoryui.UpdateHighlight ();
+			}
+		}
+		if (inventoryui.items.Count > 0) {
+			inventoryString = inventoryui.items [inventoryIndex];
+		}
+	}
 	void Start () {
 		raycastmouse = GetComponent<RayCastMouse> ();
 		itemdatabase = GetComponent<ItemDatabase> ();
@@ -23,6 +42,7 @@ public class Inventory : MonoBehaviour {
 			inventory.Add (name, 1);
 			inventoryui.AddItem (name);
 		} else {
+			inventoryui.UpdateUI ();
 			return;
 		}
 		inventoryui.UpdateUI ();
@@ -30,10 +50,10 @@ public class Inventory : MonoBehaviour {
 	public void RemoveItem(){
 		print (inventory.Count);
 		if (CheckItem ()) {
-			inventory [inventoryIndex]--;
-			if (inventory [inventoryIndex] <= 0) {
-				inventory.Remove (inventoryIndex);
-				inventoryui.RemoveItem (inventoryIndex);
+			inventory [inventoryString]--;
+			if (inventory [inventoryString] <= 0) {
+				inventory.Remove (inventoryString);
+				inventoryui.RemoveItem (inventoryString);
 			}
 		}
 		inventoryui.UpdateUI ();
@@ -47,7 +67,7 @@ public class Inventory : MonoBehaviour {
 		}
 	}
 	public bool CheckItem(){
-		if (inventory.ContainsKey (inventoryIndex)) {
+		if (inventory.ContainsKey (inventoryString)) {
 			return true;
 		} else {
 			return false;
