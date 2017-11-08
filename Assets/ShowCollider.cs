@@ -11,11 +11,14 @@ public class ShowCollider : MonoBehaviour {
 		raycastmouse = GetComponent<RayCastMouse> ();
 	}
 	
-	public void CreateObject () {
+	public void CreatePreview () {
+		DestroyPreview ();
+		previewObj = Instantiate (preview, raycastmouse.currentGameObject.transform.position, Quaternion.identity);
+		previewObj.transform.localScale = raycastmouse.currentGameObject.GetComponent<BoxCollider> ().size;
+	}
+	public void DestroyPreview(){
 		if (previewObj != null) {
 			Destroy (previewObj);
 		}
-		previewObj = Instantiate (preview, raycastmouse.currentGameObject.transform.position, Quaternion.identity);
-		previewObj.transform.localScale = raycastmouse.currentGameObject.GetComponent<BoxCollider> ().size;
 	}
 }

@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class SpawnBlock : MonoBehaviour {
 	RayCastMouse raycastmouse;
+	ItemDatabase itemdatabase;
 	public GameObject cube;
+	private Inventory inventory;
 	void Start () {
+		itemdatabase = GetComponent<ItemDatabase> ();
+		inventory = GetComponent<Inventory> ();
 		raycastmouse = GetComponent<RayCastMouse> ();
 	}
 	
 	void Update () {
-		if (Input.GetMouseButtonDown (0) && raycastmouse.currentGameObject != null) {
+		if (Input.GetMouseButtonDown (0) && raycastmouse.currentGameObject != null && inventory.inventory.ContainsKey(inventory.inventoryIndex)) {
 			SpawnCube (raycastmouse.currentGameObject.name, raycastmouse.parentObject.transform);
 		}
 		if (Input.GetMouseButtonDown (1) && raycastmouse.currentGameObject != null) {
+			inventory.AddItem (raycastmouse.parentObject.name);
 			Destroy (raycastmouse.parentObject);
 			Destroy (raycastmouse.currentGameObject);
 		}
@@ -21,25 +26,29 @@ public class SpawnBlock : MonoBehaviour {
 	void SpawnCube(string direction, Transform parentObject){
 		switch (direction) {
 		case "Up":
-			Instantiate (cube, parentObject.position + new Vector3 (0, raycastmouse.parentObject.transform.localScale.y, 0), Quaternion.identity);
+			Spawn (new Vector3 (0, raycastmouse.parentObject.transform.localScale.y, 0),parentObject);
 			break;
 		case "Down":
-			Instantiate (cube, parentObject.position + new Vector3 (0, -raycastmouse.parentObject.transform.localScale.y, 0), Quaternion.identity);
+			Spawn (new Vector3 (0, -raycastmouse.parentObject.transform.localScale.y, 0),parentObject);
 			break;
 		case "Left":
-			Instantiate (cube, parentObject.position + new Vector3 (-raycastmouse.parentObject.transform.localScale.x, 0, 0), Quaternion.identity);
+			Spawn (new Vector3 (-raycastmouse.parentObject.transform.localScale.x, 0, 0),parentObject);
 			break;
 		case "Right":
-			Instantiate (cube, parentObject.position + new Vector3 (raycastmouse.parentObject.transform.localScale.x, 0, 0), Quaternion.identity);
+			Spawn (new Vector3 (raycastmouse.parentObject.transform.localScale.x, 0, 0),parentObject);
 			break;
 		case "Front":
-			Instantiate (cube, parentObject.position + new Vector3 (0, 0, raycastmouse.parentObject.transform.localScale.z), Quaternion.identity);
+			Spawn (new Vector3 (0, 0, raycastmouse.parentObject.transform.localScale.z),parentObject);
 			break;
 		case "Back":
-			Instantiate (cube, parentObject.position + new Vector3 (0, 0, -raycastmouse.parentObject.transform.localScale.z), Quaternion.identity);
+			Spawn (new Vector3 (0, 0, -raycastmouse.parentObject.transform.localScale.z),parentObject);
 			break;
 		default:
 			break;
 		}
+	}
+	void Spawn(Vector3 pos, Transform parentObject){
+		GameObject obj = Instantiate (itemdatabase.GetItemObject(inventory.inventoryIndex), parentObject.position + pos, Quaternion.identity);
+		obj.name = parentObject.name;
 	}
 }
