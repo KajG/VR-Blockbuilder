@@ -13,18 +13,20 @@ public class Inventory : MonoBehaviour {
 	public bool hidden;
 	void Update(){
 		if (Input.GetKeyDown (KeyCode.UpArrow)) {
-			inventoryIndex++;
-			inventoryui.UpdateHighlight ();
-			if (inventoryIndex >= inventoryui.items.Count) {
-				inventoryIndex = inventoryui.items.Count;
+			print (inventory.Count);
+			if (inventoryIndex >= inventoryui.items.Count - 1) {
+				inventoryIndex = inventoryui.items.Count - 1;
 				print (inventoryui.items.Count);
+			} else {
+				inventoryIndex++;
 			}
+			inventoryui.UpdateHighlight ();
 		}
 		if (Input.GetKeyDown (KeyCode.DownArrow)) {
-			if (inventoryIndex >= 0 && inventoryIndex <= inventoryui.items.Count) {
+			if (inventoryIndex >= 1) {
 				inventoryIndex--;
-				inventoryui.UpdateHighlight ();
 			}
+			inventoryui.UpdateHighlight ();
 		}
 		if (inventoryui.items.Count > 0) {
 			inventoryString = inventoryui.items [inventoryIndex];
@@ -37,18 +39,14 @@ public class Inventory : MonoBehaviour {
 	}
 	public void AddItem(string name){
 		if (inventory.ContainsKey (name)) {
-			inventory [name] ++;
-		} else if (itemdatabase.CheckItem(name)) {
+			inventory [name]++;
+		} else {
 			inventory.Add (name, 1);
 			inventoryui.AddItem (name);
-		} else {
-			inventoryui.UpdateUI ();
-			return;
 		}
 		inventoryui.UpdateUI ();
 	}
 	public void RemoveItem(){
-		print (inventory.Count);
 		if (CheckItem ()) {
 			inventory [inventoryString]--;
 			if (inventory [inventoryString] <= 0) {
