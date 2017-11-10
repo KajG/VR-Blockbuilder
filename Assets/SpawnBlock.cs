@@ -14,7 +14,7 @@ public class SpawnBlock : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (Input.GetMouseButtonDown (0) && raycastmouse.currentGameObject != null && inventory.inventory.ContainsKey(inventory.inventoryString)) {
+		if (Input.GetMouseButtonDown (0) && raycastmouse.currentGameObject != null && inventory.inventory.ContainsKey(inventory.inventoryString) && !inventory.hidden) {
 			SpawnCube (raycastmouse.currentGameObject.name, raycastmouse.parentObject.transform);
 		}
 		if (Input.GetMouseButtonDown (1) && raycastmouse.currentGameObject != null) {

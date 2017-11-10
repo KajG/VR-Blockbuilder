@@ -12,7 +12,7 @@ public class Inventory : MonoBehaviour {
 	public int inventoryIndex;
 	public bool hidden;
 	void Update(){
-		if (Input.GetKeyDown (KeyCode.UpArrow)) {
+		if (Input.GetAxis("Mouse ScrollWheel") > 0f) {
 			print (inventory.Count);
 			if (inventoryIndex >= inventoryui.items.Count - 1) {
 				inventoryIndex = inventoryui.items.Count - 1;
@@ -22,11 +22,14 @@ public class Inventory : MonoBehaviour {
 			}
 			inventoryui.UpdateHighlight ();
 		}
-		if (Input.GetKeyDown (KeyCode.DownArrow)) {
+		if (Input.GetAxis("Mouse ScrollWheel") < 0f) {
 			if (inventoryIndex >= 1) {
 				inventoryIndex--;
 			}
 			inventoryui.UpdateHighlight ();
+		}
+		if (Input.GetKeyDown (KeyCode.Z)) {
+			HideInventory ();
 		}
 		if (inventoryui.items.Count > 0) {
 			inventoryString = inventoryui.items [inventoryIndex];

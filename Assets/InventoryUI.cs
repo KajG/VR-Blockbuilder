@@ -29,6 +29,7 @@ public class InventoryUI : MonoBehaviour {
 				Destroy (itemCount [i]);
 				Destroy (spaces [i]);
 			}
+			highlighter.SetActive (true);
 			spaces.Clear ();
 			itemNames.Clear ();
 			itemCount.Clear ();
@@ -37,7 +38,9 @@ public class InventoryUI : MonoBehaviour {
 		} 
 	}
 	public void UpdateHighlight(){
-		highlighter.transform.position = spaces [inventory.inventoryIndex].transform.position;
+		if (!inventory.hidden) {
+			highlighter.transform.position = spaces [inventory.inventoryIndex].transform.position;
+		}
 	}
 	public void HideInventory(){
 		if (!inventory.hidden) {
@@ -46,6 +49,7 @@ public class InventoryUI : MonoBehaviour {
 				Destroy (itemCount [i]);
 				Destroy (spaces [i]);
 			}
+			highlighter.SetActive(false);
 		}
 		inventory.hidden = true;
 	}
@@ -58,7 +62,7 @@ public class InventoryUI : MonoBehaviour {
 				y += 2;
 				x = 0;
 			}
-			GameObject obj = Instantiate (invSpace, new Vector3 (parentObject.transform.position.x + x,parentObject.transform.position.y + y, 0), Quaternion.identity);
+			GameObject obj = Instantiate (invSpace, new Vector3 (parentObject.transform.position.x + x,parentObject.transform.position.y + y, parentObject.transform.position.z), Quaternion.identity);
 			spaces.Add (obj);
 		}
 	}
