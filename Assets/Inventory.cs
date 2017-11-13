@@ -13,27 +13,20 @@ public class Inventory : MonoBehaviour {
 	public bool hidden;
 	void Update(){
 		if (Input.GetAxis("Mouse ScrollWheel") > 0f) {
-			print (inventory.Count);
-			if (inventoryIndex >= inventoryui.items.Count - 1) {
-				inventoryIndex = inventoryui.items.Count - 1;
-				print (inventoryui.items.Count);
-			} else {
-				inventoryIndex++;
-			}
-			inventoryui.UpdateHighlight ();
+			UpdateIndex (0);
 		}
 		if (Input.GetAxis("Mouse ScrollWheel") < 0f) {
-			if (inventoryIndex >= 1) {
-				inventoryIndex--;
-			}
-			inventoryui.UpdateHighlight ();
+			UpdateIndex (1);
 		}
 		if (Input.GetKeyDown (KeyCode.Z)) {
 			HideInventory ();
 		}
 		if (inventoryui.items.Count > 0) {
 			inventoryString = inventoryui.items [inventoryIndex];
+		} else {
+			inventoryui.highlighter.transform.position = new Vector3 (111, 111, 111);
 		}
+		print (inventory.Count);
 	}
 	void Start () {
 		raycastmouse = GetComponent<RayCastMouse> ();
@@ -55,14 +48,15 @@ public class Inventory : MonoBehaviour {
 			if (inventory [inventoryString] <= 0) {
 				inventory.Remove (inventoryString);
 				inventoryui.RemoveItem (inventoryString);
+				UpdateIndex (2);
 			}
+			inventoryui.UpdateUI ();
 		}
-		inventoryui.UpdateUI ();
 	}
 	public void HideInventory(){
 		if (!hidden) {
 			inventoryui.HideInventory ();
-		} else {
+		} else if(inventory.Count != 0){
 			hidden = false;
 			inventoryui.UpdateUI ();
 		}
@@ -72,6 +66,30 @@ public class Inventory : MonoBehaviour {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	void UpdateIndex(int i){
+		if (i == 0) {
+			if (inventoryIndex >= inventoryui.items.Count - 1 && inventory.Count != 0) {
+				inventoryIndex = inventoryui.items.Count - 1;
+			} else if(inventory.Count != 0){
+				inventoryIndex++;
+				inventoryui.UpdateHighlight ();
+			}
+		}
+		if (i == 1) {
+			if (inventoryIndex >= 1 && inventory.Count != 0) {
+				inventoryIndex--;
+				inventoryui.UpdateHighlight ();
+			} else if (inventory.Count != 0) {
+				inventoryui.UpdateHighlight ();
+			}
+		}
+		if (i == 2) {
+			if (inventoryIndex >= inventory.Count && inventory.Count != 0) {
+				inventoryIndex = inventory.Count - 1;
+				inventoryui.UpdateHighlight ();
+			}
 		}
 	}
 }

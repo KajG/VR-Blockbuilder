@@ -35,6 +35,7 @@ public class InventoryUI : MonoBehaviour {
 			itemCount.Clear ();
 			CreateSpace ();
 			CreateInventory ();
+			UpdateHighlight ();
 		} 
 	}
 	public void UpdateHighlight(){
@@ -43,14 +44,14 @@ public class InventoryUI : MonoBehaviour {
 		}
 	}
 	public void HideInventory(){
-		if (!inventory.hidden) {
+		if (items.Count != 0) {
 			for (int i = 0; i < itemNames.Count; i++) {
 				Destroy (itemNames [i]);
 				Destroy (itemCount [i]);
 				Destroy (spaces [i]);
 			}
-			highlighter.SetActive(false);
 		}
+		highlighter.SetActive(false);
 		inventory.hidden = true;
 	}
 	void CreateSpace(){
