@@ -16,6 +16,11 @@ public class InventoryUI : MonoBehaviour {
 	void Start () {
 		inventory = GetComponent<Inventory> ();
 	}
+	void Update(){
+		if(!inventory.hidden){
+			UpdateHighlight ();
+		}
+	}
 	public void AddItem(string name){
 		items.Add (name);
 	}
@@ -39,8 +44,10 @@ public class InventoryUI : MonoBehaviour {
 		} 
 	}
 	public void UpdateHighlight(){
-		if (!inventory.hidden) {
+		if (!inventory.hidden && items.Count != 0) {
 			highlighter.transform.position = spaces [inventory.inventoryIndex].transform.position;
+			highlighter.transform.rotation = spaces [inventory.inventoryIndex].transform.rotation;
+
 		}
 	}
 	public void HideInventory(){
@@ -63,19 +70,21 @@ public class InventoryUI : MonoBehaviour {
 				y += 2;
 				x = 0;
 			}
-			GameObject obj = Instantiate (invSpace, new Vector3 (parentObject.transform.position.x + x,parentObject.transform.position.y + y, parentObject.transform.position.z), Quaternion.identity);
+			GameObject obj = Instantiate (invSpace, new Vector3 (parentObject.transform.position.x,parentObject.transform.position.y + y * 0.1f, parentObject.transform.position.z + x * 0.1f), parentObject.transform.rotation);
 			spaces.Add (obj);
 		}
 	}
 	void CreateInventory(){
 		for (int i = 0; i < items.Count; i++) {
-			TextMesh newText = Instantiate (countText, new Vector3 (spaces [i].transform.position.x + 0.5f, spaces [i].transform.position.y + 0.5f, spaces [i].transform.position.z), Quaternion.identity);
+			TextMesh newText = Instantiate (countText, new Vector3 (spaces [i].transform.position.x, spaces [i].transform.position.y + 0.05f, spaces [i].transform.position.z + 0.05f), Quaternion.identity);
 			newText.text = "" + inventory.inventory [items [i]];
 			newText.fontSize = 30;
+			newText.transform.eulerAngles = new Vector3 (0, 90, 0);
 			itemCount.Add (newText);
 			TextMesh newText2 = Instantiate (nameText, spaces [i].transform.position, Quaternion.identity);
 			newText2.text = items [i];
 			newText2.fontSize = 30;
+			newText2.transform.eulerAngles = new Vector3 (0, 90, 0);
 			itemNames.Add (newText2);
 			itemNames [i].transform.SetParent (parentObject);
 			itemCount [i].transform.SetParent (parentObject);

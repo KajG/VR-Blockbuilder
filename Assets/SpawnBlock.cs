@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnBlock : MonoBehaviour {
-	RayCastMouse raycastmouse;
-	ItemDatabase itemdatabase;
+	public RayCastMouse raycastmouse;
+	public ItemDatabase itemdatabase;
 	public GameObject cube;
 	private Inventory inventory;
+	private SteamVR_TrackedObject trackedObj;
+	private SteamVR_Controller.Device Controller{ get{return SteamVR_Controller.Input((int)trackedObj.index);}}
 	void Start () {
-		itemdatabase = GetComponent<ItemDatabase> ();
-		inventory = GetComponent<Inventory> ();
+		itemdatabase = GameObject.Find("[CameraRig]").GetComponent<ItemDatabase> ();
+		inventory = GameObject.Find("Controller (left)").GetComponent<Inventory> ();
 		raycastmouse = GetComponent<RayCastMouse> ();
+		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 	}
 	
 	void Update () {
-		if (Input.GetMouseButtonDown (0) && raycastmouse.currentGameObject != null && inventory.inventory.ContainsKey(inventory.inventoryString) && !inventory.hidden) {
+		if (Controller.GetPressDown (4) && raycastmouse.currentGameObject != null && inventory.inventory.ContainsKey (inventory.inventoryString) && !inventory.hidden) {
 			SpawnCube (raycastmouse.currentGameObject.name, raycastmouse.parentObject.transform);
 		}
-		if (Input.GetMouseButtonDown (1) && raycastmouse.currentGameObject != null) {
+		if (Controller.GetHairTriggerDown () && raycastmouse.currentGameObject != null) {
 			inventory.AddItem (raycastmouse.parentObject.name);
 			Destroy (raycastmouse.parentObject);
 			Destroy (raycastmouse.currentGameObject);

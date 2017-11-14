@@ -5,17 +5,25 @@ using UnityEngine;
 public class Inventory : MonoBehaviour {
 
 	public Dictionary<string, int> inventory = new Dictionary<string, int>();
-	private RayCastMouse raycastmouse;
+	public RayCastMouse raycastmouse;
 	public ItemDatabase itemdatabase;
 	public InventoryUI inventoryui;
 	public string inventoryString;
 	public int inventoryIndex;
 	public bool hidden;
+	private SteamVR_TrackedObject trackedObj;
+	private SteamVR_Controller.Device Controller{ get{return SteamVR_Controller.Input((int)trackedObj.index);}}
+	void Start () {
+		raycastmouse = GetComponent<RayCastMouse> ();
+		itemdatabase = GetComponent<ItemDatabase> ();
+		inventoryui = GetComponent<InventoryUI> ();
+		trackedObj = GetComponent<SteamVR_TrackedObject> ();
+	}
 	void Update(){
-		if (Input.GetAxis("Mouse ScrollWheel") > 0f) {
+		if (Controller.GetAxis ().y >= 0.5f && Controller.GetPressDown (1)) {
 			UpdateIndex (0);
 		}
-		if (Input.GetAxis("Mouse ScrollWheel") < 0f) {
+		if (Controller.GetAxis ().y <= 0.5f && Controller.GetPressDown (1)) {
 			UpdateIndex (1);
 		}
 		if (Input.GetKeyDown (KeyCode.Z)) {
@@ -26,12 +34,6 @@ public class Inventory : MonoBehaviour {
 		} else {
 			inventoryui.highlighter.transform.position = new Vector3 (111, 111, 111);
 		}
-		print (inventory.Count);
-	}
-	void Start () {
-		raycastmouse = GetComponent<RayCastMouse> ();
-		itemdatabase = GetComponent<ItemDatabase> ();
-		inventoryui = GetComponent<InventoryUI> ();
 	}
 	public void AddItem(string name){
 		if (inventory.ContainsKey (name)) {
