@@ -26,7 +26,7 @@ public class Inventory : MonoBehaviour {
 		if (Controller.GetAxis ().y <= 0.5f && Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)) {
 			UpdateIndex (1);
 		}
-		if (Input.GetKeyDown (KeyCode.Z)) {
+		if (Controller.GetPressDown (2)) {
 			HideInventory ();
 		}
 		if (inventoryui.items.Count > 0) {

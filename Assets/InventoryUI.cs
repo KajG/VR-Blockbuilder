@@ -71,6 +71,7 @@ public class InventoryUI : MonoBehaviour {
 				x = 0;
 			}
 			GameObject obj = Instantiate (invSpace, new Vector3 (parentObject.transform.position.x,parentObject.transform.position.y + y * 0.1f, parentObject.transform.position.z + x * 0.1f), parentObject.transform.rotation);
+			obj.transform.eulerAngles += new Vector3 (0, 45, 0);
 			spaces.Add (obj);
 		}
 	}
