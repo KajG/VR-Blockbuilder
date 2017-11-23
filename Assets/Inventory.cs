@@ -20,10 +20,10 @@ public class Inventory : MonoBehaviour {
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 	}
 	void Update(){
-		if (Controller.GetAxis ().y >= 0.5f && Controller.GetPressDown (1)) {
+		if (Controller.GetAxis ().y >= 0.5f && Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)) {
 			UpdateIndex (0);
 		}
-		if (Controller.GetAxis ().y <= 0.5f && Controller.GetPressDown (1)) {
+		if (Controller.GetAxis ().y <= 0.5f && Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)) {
 			UpdateIndex (1);
 		}
 		if (Input.GetKeyDown (KeyCode.Z)) {
